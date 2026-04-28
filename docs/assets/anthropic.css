@@ -114,6 +114,20 @@ p {
   color: var(--anth-text-secondary);
 }
 
+.anth-body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.anth-subhead {
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--anth-text-secondary);
+}
+
 /* ---------- Section D: Link & Button (Anthropic uses filled pills as primary CTA) ---------- */
 .anth-button {
   display: inline-block;
