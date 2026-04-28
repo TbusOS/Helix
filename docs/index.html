@@ -446,96 +446,107 @@
       </h2>
 
       <!-- Architecture SVG -->
-      <svg class="architecture-svg" viewBox="0 0 900 500" role="img" aria-label="Helix System Architecture">
+      <svg class="architecture-svg" viewBox="0 0 800 520" role="img" aria-label="Helix System Architecture">
         <!-- Background -->
-        <rect width="900" height="500" fill="#faf9f5"/>
+        <rect width="800" height="520" fill="#faf9f5"/>
 
-        <!-- Frontend Layer -->
-        <rect x="50" y="30" width="250" height="180" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
-        <text x="175" y="60" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Frontend</text>
-        <text x="175" y="80" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">React + Vite + TypeScript</text>
+        <!-- === TOP ROW: Three equal columns === -->
+        <!-- Frontend -->
+        <rect x="20" y="20" width="240" height="140" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="140" y="50" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Frontend</text>
+        <text x="140" y="68" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">React + Vite + TS</text>
+        <rect x="40" y="82" width="200" height="22" rx="4" fill="#d97757" opacity="0.12"/>
+        <text x="140" y="98" font-family="Poppins" font-size="10" fill="#d97757" text-anchor="middle">Model Management UI</text>
+        <rect x="40" y="110" width="200" height="22" rx="4" fill="#6a9bcc" opacity="0.12"/>
+        <text x="140" y="126" font-family="Poppins" font-size="10" fill="#6a9bcc" text-anchor="middle">Chat + Monitor</text>
 
-        <!-- Frontend components -->
-        <rect x="70" y="95" width="210" height="25" rx="6" fill="#d97757" opacity="0.15"/>
-        <text x="175" y="112" font-family="Poppins" font-size="10" fill="#d97757" text-anchor="middle">Model Management UI</text>
-        <rect x="70" y="125" width="210" height="25" rx="6" fill="#6a9bcc" opacity="0.15"/>
-        <text x="175" y="142" font-family="Poppins" font-size="10" fill="#6a9bcc" text-anchor="middle">Chat Interface</text>
-        <rect x="70" y="155" width="210" height="25" rx="6" fill="#788c5d" opacity="0.15"/>
-        <text x="175" y="172" font-family="Poppins" font-size="10" fill="#788c5d" text-anchor="middle">Monitoring Dashboard</text>
+        <!-- Arrow: Frontend → API -->
+        <path d="M 260 90 L 280 90" stroke="#d97757" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="270" y="82" font-family="Poppins" font-size="8" fill="#6b6a5f" text-anchor="middle">REST / WS</text>
 
-        <!-- Communication arrows -->
-        <path d="M 300 120 L 340 120" stroke="#d97757" stroke-width="2" marker-end="url(#arrowhead)"/>
-        <path d="M 300 140 L 340 140" stroke="#6a9bcc" stroke-width="2" marker-end="url(#arrowhead)"/>
-        <text x="320" y="110" font-family="Poppins" font-size="9" fill="#6b6a5f">REST/WebSocket</text>
+        <!-- Backend API -->
+        <rect x="280" y="20" width="240" height="140" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="400" y="50" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Backend API</text>
+        <text x="400" y="68" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">FastAPI + Socket.IO</text>
+        <rect x="300" y="82" width="200" height="22" rx="4" fill="#f0ede3"/>
+        <text x="400" y="98" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/models /chat /monitor</text>
+        <rect x="300" y="110" width="200" height="22" rx="4" fill="#f0ede3"/>
+        <text x="400" y="126" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/config + WebSocket</text>
 
-        <!-- API Layer -->
-        <rect x="340" y="30" width="220" height="180" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
-        <text x="450" y="60" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Backend API</text>
-        <text x="450" y="80" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">FastAPI + Socket.IO</text>
-
-        <!-- API endpoints -->
-        <rect x="360" y="95" width="180" height="22" rx="4" fill="#f0ede3"/>
-        <text x="450" y="110" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/api/models | /api/chat</text>
-        <rect x="360" y="122" width="180" height="22" rx="4" fill="#f0ede3"/>
-        <text x="450" y="137" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/api/monitor | /api/config</text>
-        <rect x="360" y="149" width="180" height="22" rx="4" fill="#f0ede3"/>
-        <text x="450" y="164" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">WebSocket / SSE</text>
-
-        <!-- Core Modules -->
-        <rect x="50" y="260" width="510" height="200" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
-        <text x="305" y="290" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Core Modules</text>
-
-        <!-- Module boxes -->
-        <rect x="70" y="310" width="145" height="130" rx="12" fill="#d97757" opacity="0.1" stroke="#d97757" stroke-width="1"/>
-        <text x="142" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#d97757" text-anchor="middle">Model Adapters</text>
-        <text x="142" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Ollama</text>
-        <text x="142" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">LM Studio</text>
-        <text x="142" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">llama.cpp</text>
-        <text x="142" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Plugin API</text>
-
-        <rect x="232" y="310" width="145" height="130" rx="12" fill="#6a9bcc" opacity="0.1" stroke="#6a9bcc" stroke-width="1"/>
-        <text x="304" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#6a9bcc" text-anchor="middle">Chat Engine</text>
-        <text x="304" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Parallel</text>
-        <text x="304" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Serial</text>
-        <text x="304" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Role-based</text>
-        <text x="304" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Autonomous</text>
-
-        <rect x="394" y="310" width="145" height="130" rx="12" fill="#788c5d" opacity="0.1" stroke="#788c5d" stroke-width="1"/>
-        <text x="466" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#788c5d" text-anchor="middle">Monitor Agent</text>
-        <text x="466" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">CPU/RAM</text>
-        <text x="466" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">GPU Metrics</text>
-        <text x="466" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Model Params</text>
-        <text x="466" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">KV Cache</text>
+        <!-- Arrow: API → Runtimes -->
+        <path d="M 520 90 L 540 90" stroke="#d97757" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="530" y="82" font-family="Poppins" font-size="8" fill="#6b6a5f" text-anchor="middle">HTTP</text>
 
         <!-- External Runtimes -->
-        <rect x="620" y="260" width="230" height="90" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
-        <text x="735" y="290" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">External Runtimes</text>
-        <text x="735" y="315" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">Ollama Server | LM Studio | llama.cpp</text>
-        <text x="735" y="335" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">localhost | LAN | Remote</text>
+        <rect x="540" y="20" width="240" height="140" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="660" y="50" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Model Runtimes</text>
+        <text x="660" y="68" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">Local / LAN / Remote</text>
+        <rect x="560" y="82" width="200" height="22" rx="4" fill="#d97757" opacity="0.12"/>
+        <text x="660" y="98" font-family="Poppins" font-size="10" fill="#d97757" text-anchor="middle">Ollama · LM Studio</text>
+        <rect x="560" y="110" width="200" height="22" rx="4" fill="#788c5d" opacity="0.12"/>
+        <text x="660" y="126" font-family="Poppins" font-size="10" fill="#788c5d" text-anchor="middle">llama.cpp</text>
 
-        <!-- Arrow to external -->
-        <path d="M 560 310 L 610 310" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+        <!-- === MIDDLE: Core Modules (3 equal boxes) === -->
+        <!-- Arrow down from API -->
+        <path d="M 400 160 L 400 190" stroke="#141413" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
 
-        <!-- Storage Layer -->
-        <rect x="620" y="370" width="230" height="90" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
-        <text x="735" y="400" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Storage</text>
-        <text x="735" y="425" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">JSON/SQLite | Cloud Sync</text>
+        <!-- Core Modules container -->
+        <rect x="20" y="190" width="760" height="180" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="400" y="215" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Core Modules</text>
 
-        <!-- Arrow to storage -->
-        <path d="M 560 430 L 610 430" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+        <!-- Model Adapters -->
+        <rect x="40" y="230" width="230" height="120" rx="12" fill="#d97757" opacity="0.08" stroke="#d97757" stroke-width="1"/>
+        <text x="155" y="255" font-family="Poppins" font-size="12" font-weight="600" fill="#d97757" text-anchor="middle">Model Adapters</text>
+        <text x="155" y="275" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">OllamaAdapter</text>
+        <text x="155" y="290" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">LMStudioAdapter</text>
+        <text x="155" y="305" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">LlamaCppAdapter</text>
+        <text x="155" y="325" font-family="Lora" font-size="9" fill="#d97757" text-anchor="middle">Plugin API</text>
+
+        <!-- Chat Engine -->
+        <rect x="285" y="230" width="230" height="120" rx="12" fill="#6a9bcc" opacity="0.08" stroke="#6a9bcc" stroke-width="1"/>
+        <text x="400" y="255" font-family="Poppins" font-size="12" font-weight="600" fill="#6a9bcc" text-anchor="middle">Chat Engine</text>
+        <text x="400" y="275" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Parallel · Serial</text>
+        <text x="400" y="290" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Role-based · Autonomous</text>
+        <text x="400" y="310" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Control: pause / resume</text>
+        <text x="400" y="325" font-family="Lora" font-size="9" fill="#6a9bcc" text-anchor="middle">5 modes</text>
+
+        <!-- Monitor Agent -->
+        <rect x="530" y="230" width="230" height="120" rx="12" fill="#788c5d" opacity="0.08" stroke="#788c5d" stroke-width="1"/>
+        <text x="645" y="255" font-family="Poppins" font-size="12" font-weight="600" fill="#788c5d" text-anchor="middle">Monitor Agent</text>
+        <text x="645" y="275" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">CPU / RAM / GPU</text>
+        <text x="645" y="290" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Model Params · KV Cache</text>
+        <text x="645" y="305" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Quantization Info</text>
+        <text x="645" y="325" font-family="Lora" font-size="9" fill="#788c5d" text-anchor="middle">Real-time</text>
+
+        <!-- === BOTTOM ROW: Plugin + Config + Storage === -->
+        <!-- Arrow down -->
+        <path d="M 400 370 L 400 400" stroke="#141413" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
 
         <!-- Plugin System -->
-        <rect x="50" y="480" width="510" height="70" rx="12" fill="#f0ede3" stroke="#e8e6dc" stroke-width="1"/>
-        <text x="305" y="505" font-family="Poppins" font-size="12" font-weight="500" fill="#141413" text-anchor="middle">Plugin System (Event Bus) + Config Manager</text>
-        <text x="305" y="525" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">pre_generate | post_generate | on_metrics | on_chat_event</text>
+        <rect x="20" y="400" width="360" height="100" rx="12" fill="#f0ede3" stroke="#e8e6dc" stroke-width="1"/>
+        <text x="200" y="425" font-family="Poppins" font-size="13" font-weight="600" fill="#141413" text-anchor="middle">Plugin System</text>
+        <text x="200" y="445" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Event Bus + Hooks</text>
+        <text x="200" y="462" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">pre_generate · post_generate · on_metrics · on_chat_event</text>
+        <text x="200" y="480" font-family="Lora" font-size="9" fill="#d97757" text-anchor="middle">Extensible: scoring · export · benchmarking</text>
 
-        <!-- Arrow to plugins -->
-        <path d="M 305 460 L 305 475" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+        <!-- Config Manager -->
+        <rect x="400" y="400" width="180" height="100" rx="12" fill="#f0ede3" stroke="#e8e6dc" stroke-width="1"/>
+        <text x="490" y="425" font-family="Poppins" font-size="13" font-weight="600" fill="#141413" text-anchor="middle">Config</text>
+        <text x="490" y="445" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Global / Session /</text>
+        <text x="490" y="462" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Model bindings</text>
+        <text x="490" y="482" font-family="Lora" font-size="9" fill="#6a9bcc" text-anchor="middle">Import / Export</text>
+
+        <!-- Storage -->
+        <rect x="600" y="400" width="180" height="100" rx="12" fill="#f0ede3" stroke="#e8e6dc" stroke-width="1"/>
+        <text x="690" y="425" font-family="Poppins" font-size="13" font-weight="600" fill="#141413" text-anchor="middle">Storage</text>
+        <text x="690" y="445" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">JSON · SQLite</text>
+        <text x="690" y="462" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">Chat History</text>
+        <text x="690" y="482" font-family="Lora" font-size="9" fill="#788c5d" text-anchor="middle">Cloud Sync (opt)</text>
 
         <!-- Arrowhead definition -->
         <defs>
-          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" fill="#141413"/>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#141413"/>
           </marker>
         </defs>
       </svg>
