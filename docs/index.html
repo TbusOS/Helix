@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helix - Multi-Model Local LLM Chat Platform / 多模型本地 LLM 聊天平台</title>
+  <link rel="stylesheet" href="./assets/fonts.css">
+  <link rel="stylesheet" href="./assets/anthropic.css">
+  <style>
+    :root {
+      --font-heading: "Poppins", "Helvetica Neue", Arial, sans-serif;
+      --font-body: "Lora", Georgia, "Times New Roman", serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .code-block {
+      background: var(--anth-bg-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      overflow-x: auto;
+    }
+
+    .lang-toggle {
+      position: fixed;
+      top: var(--space-4);
+      right: var(--space-4);
+      z-index: 100;
+    }
+
+    .lang-toggle button {
+      background: var(--anth-bg-subtle);
+      border: 1px solid var(--anth-light-gray);
+      border-radius: var(--radius-pill);
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-heading);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all var(--duration-sm) var(--ease-anth);
+    }
+
+    .lang-toggle button:hover {
+      background: var(--anth-light-gray);
+    }
+
+    .lang-toggle button.active {
+      background: var(--anth-orange);
+      color: white;
+      border-color: var(--anth-orange);
+    }
+
+    [data-lang] { display: none; }
+    [data-lang="zh"] { display: block; }
+
+    .en [data-lang="zh"] { display: none; }
+    .en [data-lang="en"] { display: block; }
+
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+      margin-top: var(--space-7);
+    }
+
+    .capability-card {
+      padding: var(--space-5);
+      background: var(--anth-bg);
+      border: 1px solid var(--anth-light-gray);
+      border-radius: var(--radius-md);
+      transition: box-shadow var(--duration-sm) var(--ease-anth);
+    }
+
+    .capability-card:hover {
+      box-shadow: var(--shadow-card);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-5);
+      margin-top: var(--space-6);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: var(--space-5);
+      background: var(--anth-bg-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .stat-number {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--anth-orange);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--anth-text-secondary);
+      margin-top: var(--space-2);
+    }
+
+    .architecture-svg {
+      width: 100%;
+      max-width: 900px;
+      margin: var(--space-7) auto;
+    }
+
+    .comparison-table {
+      width: 100%;
+      margin-top: var(--space-6);
+    }
+
+    .comparison-table th {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--anth-text-secondary);
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--anth-light-gray);
+    }
+
+    .comparison-table td {
+      font-family: var(--font-body);
+      font-size: 15px;
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--anth-light-gray);
+      vertical-align: top;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .check-icon {
+      color: var(--anth-green);
+      font-weight: bold;
+    }
+
+    .partial-icon {
+      color: var(--anth-orange);
+    }
+
+    .tech-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      background: var(--anth-bg-subtle);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      margin: var(--space-1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Language Toggle -->
+  <div class="lang-toggle">
+    <button class="active" onclick="document.body.classList.remove('en')">中文</button>
+    <button onclick="document.body.classList.add('en')">English</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="anth-nav">
+    <div class="anth-nav-inner">
+      <a href="#" style="font-family: var(--font-heading); font-weight: 600; font-size: 18px; color: var(--anth-text);">Helix</a>
+      <div>
+        <a href="#features" data-lang="zh">功能</a>
+        <a href="#features" data-lang="en">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#getting-started">Docs</a>
+        <a href="#comparison">Compare</a>
+      </div>
+      <div>
+        <a class="anth-button" href="#getting-started" data-lang="zh">快速开始</a>
+        <a class="anth-button" href="#getting-started" data-lang="en">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="anth-hero">
+    <div class="anth-container--wide" style="text-align: center;">
+      <!-- Logo / Hero Illustration -->
+      <svg class="hero-illustration" viewBox="0 0 800 300" role="img" aria-label="Helix - Multi-Model LLM Platform">
+        <!-- Background elements -->
+        <circle cx="400" cy="150" r="120" fill="#d97757" opacity="0.15"/>
+        <circle cx="280" cy="100" r="60" fill="#6a9bcc" opacity="0.2"/>
+        <circle cx="520" cy="200" r="50" fill="#788c5d" opacity="0.2"/>
+
+        <!-- Main helix spiral (DNA-like) -->
+        <path d="M 200 50 Q 300 100 400 150 Q 500 200 600 250" stroke="#d97757" stroke-width="4" fill="none" opacity="0.8"/>
+        <path d="M 200 250 Q 300 200 400 150 Q 500 100 600 50" stroke="#6a9bcc" stroke-width="4" fill="none" opacity="0.8"/>
+
+        <!-- Connection nodes -->
+        <circle cx="200" cy="50" r="12" fill="#d97757"/>
+        <circle cx="200" cy="250" r="12" fill="#6a9bcc"/>
+        <circle cx="400" cy="150" r="20" fill="#d97757" opacity="0.6"/>
+        <circle cx="400" cy="150" r="12" fill="#ffffff" stroke="#d97757" stroke-width="2"/>
+        <circle cx="600" cy="250" r="12" fill="#d97757"/>
+        <circle cx="600" cy="50" r="12" fill="#6a9bcc"/>
+
+        <!-- Model nodes -->
+        <rect x="120" cy="120" width="60" height="60" rx="12" fill="#788c5d" opacity="0.9"/>
+        <rect x="620" y="120" width="60" height="60" rx="12" fill="#788c5d" opacity="0.9"/>
+        <rect x="370" y="250" width="60" height="40" rx="8" fill="#d97757" opacity="0.8"/>
+
+        <!-- Labels -->
+        <text x="150" y="155" font-family="var(--font-heading)" font-size="10" fill="#6b6a5f">Ollama</text>
+        <text x="630" y="155" font-family="var(--font-heading)" font-size="10" fill="#6b6a5f">LM Studio</text>
+        <text x="375" y="275" font-family="var(--font-heading)" font-size="9" fill="#6b6a5f">llama.cpp</text>
+      </svg>
+
+      <span class="anth-badge" style="margin-top: var(--space-5);">Open Source / 开源</span>
+
+      <h1 style="margin-top: var(--space-4);">
+        <span data-lang="zh">本地 LLM 聊天平台</span>
+        <span data-lang="en">Local LLM Chat Platform</span>
+      </h1>
+
+      <p class="anth-subhead" style="max-width: 680px; margin: var(--space-5) auto;">
+        <span data-lang="zh">
+          Helix 是一个开源平台，支持多模型运行时、本地部署、群聊讨论、深度监控和参数调优。让多个 AI 模型协作讨论，自主得出最佳方案。
+        </span>
+        <span data-lang="en">
+          Helix is an open-source platform for multi-model runtimes, local deployment, group chat discussions, deep monitoring, and parameter tuning. Enable multiple AI models to collaborate and reach optimal solutions together.
+        </span>
+      </p>
+
+      <p style="margin-top: var(--space-6);">
+        <a class="anth-button" href="https://github.com/TbusOS/Helix" target="_blank">
+          <span data-lang="zh">GitHub 仓库</span>
+          <span data-lang="en">GitHub Repository</span>
+          →
+        </a>
+        <a class="anth-button anth-button--ghost" href="#getting-started" style="margin-left: var(--space-4);">
+          <span data-lang="zh">快速开始</span>
+          <span data-lang="en">Quick Start</span>
+        </a>
+      </p>
+
+      <!-- Tech Stack Badges -->
+      <div style="margin-top: var(--space-6);">
+        <span class="tech-badge">Python</span>
+        <span class="tech-badge">FastAPI</span>
+        <span class="tech-badge">React</span>
+        <span class="tech-badge">TypeScript</span>
+        <span class="tech-badge">WebSocket</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="anth-section">
+    <div class="anth-container--wide">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-number">3+</div>
+          <div class="stat-label" data-lang="zh">支持模型运行时</div>
+          <div class="stat-label" data-lang="en">Model Runtimes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label" data-lang="zh">群聊模式</div>
+          <div class="stat-label" data-lang="en">Group Chat Modes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">∞</div>
+          <div class="stat-label" data-lang="zh">可扩展插件</div>
+          <div class="stat-label" data-lang="en">Extensible Plugins</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3</div>
+          <div class="stat-label" data-lang="zh">部署模式</div>
+          <div class="stat-label" data-lang="en">Deployment Modes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="anth-section anth-section--subtle" id="features">
+    <div class="anth-container--wide">
+      <h2 style="text-align: center;">
+        <span data-lang="zh">核心功能</span>
+        <span data-lang="en">Core Features</span>
+      </h2>
+
+      <div class="capabilities-grid">
+        <!-- Feature 1 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-orange);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <rect x="6" y="6" width="20" height="20" rx="4"/>
+                <circle cx="12" cy="12" r="3"/>
+                <circle cx="20" cy="12" r="3"/>
+                <circle cx="12" cy="20" r="3"/>
+                <circle cx="20" cy="20" r="3"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">多运行时支持</span>
+            <span data-lang="en">Multi-Runtime Support</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">统一接口连接 Ollama、LM Studio、llama.cpp，自动适配不同运行环境。</span>
+            <span data-lang="en">Unified interface connecting Ollama, LM Studio, and llama.cpp with automatic runtime adaptation.</span>
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-blue);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <path d="M8 8 L16 16 L8 24"/>
+                <path d="M16 24 L24 24 L24 16"/>
+                <circle cx="24" cy="8" r="4"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">群聊模式</span>
+            <span data-lang="en">Group Chat Modes</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">并行响应、串行对话、角色分工、自主讨论，多种模式自由切换。</span>
+            <span data-lang="en">Parallel responses, serial dialogue, role-based collaboration, and autonomous discussion modes.</span>
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-green);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <rect x="4" y="16" width="6" height="12" rx="1"/>
+                <rect x="13" y="10" width="6" height="18" rx="1"/>
+                <rect x="22" y="4" width="6" height="24" rx="1"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">深度监控</span>
+            <span data-lang="en">Deep Monitoring</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">实时显示内存占用、GPU 使用、参数数量、量化类型、KV Cache 等详细信息。</span>
+            <span data-lang="en">Real-time display of memory usage, GPU utilization, parameter counts, quantization types, and KV cache.</span>
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-orange);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <circle cx="16" cy="16" r="10"/>
+                <path d="M16 6 L16 12 L22 16"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">参数调优</span>
+            <span data-lang="en">Parameter Tuning</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">全局、会话级、模型级三级参数配置，实时调整 temperature、top_p 等。</span>
+            <span data-lang="en">Three-level parameter config (global, conversation, model) with real-time temperature, top_p tuning.</span>
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-blue);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <rect x="4" y="4" width="24" height="24" rx="4"/>
+                <path d="M4 12 L28 12"/>
+                <path d="M12 12 L12 28"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">跨平台部署</span>
+            <span data-lang="en">Cross-Platform Deployment</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">支持 Linux、Windows、macOS，可本地、局域网、远程服务器多种模式。</span>
+            <span data-lang="en">Runs on Linux, Windows, macOS — deploy locally, on LAN, or connect to remote servers.</span>
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="capability-card">
+          <div class="feature-icon" style="background: var(--anth-green);">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <g fill="none" stroke="#faf9f5" stroke-width="1.8" stroke-linecap="round">
+                <path d="M8 16 L14 10 L14 22 Z"/>
+                <path d="M18 10 L26 16 L18 22 Z"/>
+              </g>
+            </svg>
+          </div>
+          <h3>
+            <span data-lang="zh">插件系统</span>
+            <span data-lang="en">Plugin System</span>
+          </h3>
+          <p class="anth-body" style="color: var(--anth-text-secondary);">
+            <span data-lang="zh">事件驱动的插件架构，轻松扩展新功能：模型评分、聊天导出、能力对比。</span>
+            <span data-lang="en">Event-driven plugin architecture for easy extension: model scoring, chat export, capability comparison.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="anth-section" id="architecture">
+    <div class="anth-container--wide">
+      <h2 style="text-align: center;">
+        <span data-lang="zh">系统架构</span>
+        <span data-lang="en">System Architecture</span>
+      </h2>
+
+      <!-- Architecture SVG -->
+      <svg class="architecture-svg" viewBox="0 0 900 500" role="img" aria-label="Helix System Architecture">
+        <!-- Background -->
+        <rect width="900" height="500" fill="#faf9f5"/>
+
+        <!-- Frontend Layer -->
+        <rect x="50" y="30" width="250" height="180" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="175" y="60" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Frontend</text>
+        <text x="175" y="80" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">React + Vite + TypeScript</text>
+
+        <!-- Frontend components -->
+        <rect x="70" y="95" width="210" height="25" rx="6" fill="#d97757" opacity="0.15"/>
+        <text x="175" y="112" font-family="Poppins" font-size="10" fill="#d97757" text-anchor="middle">Model Management UI</text>
+        <rect x="70" y="125" width="210" height="25" rx="6" fill="#6a9bcc" opacity="0.15"/>
+        <text x="175" y="142" font-family="Poppins" font-size="10" fill="#6a9bcc" text-anchor="middle">Chat Interface</text>
+        <rect x="70" y="155" width="210" height="25" rx="6" fill="#788c5d" opacity="0.15"/>
+        <text x="175" y="172" font-family="Poppins" font-size="10" fill="#788c5d" text-anchor="middle">Monitoring Dashboard</text>
+
+        <!-- Communication arrows -->
+        <path d="M 300 120 L 340 120" stroke="#d97757" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <path d="M 300 140 L 340 140" stroke="#6a9bcc" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="320" y="110" font-family="Poppins" font-size="9" fill="#6b6a5f">REST/WebSocket</text>
+
+        <!-- API Layer -->
+        <rect x="340" y="30" width="220" height="180" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="450" y="60" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Backend API</text>
+        <text x="450" y="80" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">FastAPI + Socket.IO</text>
+
+        <!-- API endpoints -->
+        <rect x="360" y="95" width="180" height="22" rx="4" fill="#f0ede3"/>
+        <text x="450" y="110" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/api/models | /api/chat</text>
+        <rect x="360" y="122" width="180" height="22" rx="4" fill="#f0ede3"/>
+        <text x="450" y="137" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">/api/monitor | /api/config</text>
+        <rect x="360" y="149" width="180" height="22" rx="4" fill="#f0ede3"/>
+        <text x="450" y="164" font-family="JetBrains Mono" font-size="9" fill="#141413" text-anchor="middle">WebSocket / SSE</text>
+
+        <!-- Core Modules -->
+        <rect x="50" y="260" width="510" height="200" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="305" y="290" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Core Modules</text>
+
+        <!-- Module boxes -->
+        <rect x="70" y="310" width="145" height="130" rx="12" fill="#d97757" opacity="0.1" stroke="#d97757" stroke-width="1"/>
+        <text x="142" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#d97757" text-anchor="middle">Model Adapters</text>
+        <text x="142" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Ollama</text>
+        <text x="142" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">LM Studio</text>
+        <text x="142" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">llama.cpp</text>
+        <text x="142" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Plugin API</text>
+
+        <rect x="232" y="310" width="145" height="130" rx="12" fill="#6a9bcc" opacity="0.1" stroke="#6a9bcc" stroke-width="1"/>
+        <text x="304" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#6a9bcc" text-anchor="middle">Chat Engine</text>
+        <text x="304" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Parallel</text>
+        <text x="304" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Serial</text>
+        <text x="304" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Role-based</text>
+        <text x="304" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Autonomous</text>
+
+        <rect x="394" y="310" width="145" height="130" rx="12" fill="#788c5d" opacity="0.1" stroke="#788c5d" stroke-width="1"/>
+        <text x="466" y="335" font-family="Poppins" font-size="12" font-weight="500" fill="#788c5d" text-anchor="middle">Monitor Agent</text>
+        <text x="466" y="355" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">CPU/RAM</text>
+        <text x="466" y="370" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">GPU Metrics</text>
+        <text x="466" y="385" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">Model Params</text>
+        <text x="466" y="400" font-family="Lora" font-size="9" fill="#6b6a5f" text-anchor="middle">KV Cache</text>
+
+        <!-- External Runtimes -->
+        <rect x="620" y="260" width="230" height="90" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="735" y="290" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">External Runtimes</text>
+        <text x="735" y="315" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">Ollama Server | LM Studio | llama.cpp</text>
+        <text x="735" y="335" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">localhost | LAN | Remote</text>
+
+        <!-- Arrow to external -->
+        <path d="M 560 310 L 610 310" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+
+        <!-- Storage Layer -->
+        <rect x="620" y="370" width="230" height="90" rx="16" fill="#ffffff" stroke="#e8e6dc" stroke-width="1.5"/>
+        <text x="735" y="400" font-family="Poppins" font-size="14" font-weight="600" fill="#141413" text-anchor="middle">Storage</text>
+        <text x="735" y="425" font-family="Lora" font-size="11" fill="#6b6a5f" text-anchor="middle">JSON/SQLite | Cloud Sync</text>
+
+        <!-- Arrow to storage -->
+        <path d="M 560 430 L 610 430" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+
+        <!-- Plugin System -->
+        <rect x="50" y="480" width="510" height="70" rx="12" fill="#f0ede3" stroke="#e8e6dc" stroke-width="1"/>
+        <text x="305" y="505" font-family="Poppins" font-size="12" font-weight="500" fill="#141413" text-anchor="middle">Plugin System (Event Bus) + Config Manager</text>
+        <text x="305" y="525" font-family="Lora" font-size="10" fill="#6b6a5f" text-anchor="middle">pre_generate | post_generate | on_metrics | on_chat_event</text>
+
+        <!-- Arrow to plugins -->
+        <path d="M 305 460 L 305 475" stroke="#141413" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+
+        <!-- Arrowhead definition -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#141413"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section class="anth-section anth-section--subtle" id="getting-started">
+    <div class="anth-container--narrow">
+      <h2 style="text-align: center;">
+        <span data-lang="zh">快速开始</span>
+        <span data-lang="en">Quick Start</span>
+      </h2>
+
+      <div style="margin-top: var(--space-6);">
+        <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: var(--space-4);">
+          <span data-lang="zh">1. 克隆仓库</span>
+          <span data-lang="en">1. Clone the Repository</span>
+        </h3>
+        <div class="code-block">
+          <code>git clone https://github.com/TbusOS/Helix.git<br>cd Helix</code>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-6);">
+        <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: var(--space-4);">
+          <span data-lang="zh">2. 启动后端</span>
+          <span data-lang="en">2. Start Backend</span>
+        </h3>
+        <div class="code-block">
+          <code>cd backend<br>pip install -r requirements.txt<br>uvicorn helix.main:app --reload --port 8000</code>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-6);">
+        <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: var(--space-4);">
+          <span data-lang="zh">3. 启动前端</span>
+          <span data-lang="en">3. Start Frontend</span>
+        </h3>
+        <div class="code-block">
+          <code>cd frontend<br>npm install<br>npm run dev</code>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-6);">
+        <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: var(--space-4);">
+          <span data-lang="zh">4. 使用 Docker (可选)</span>
+          <span data-lang="en">4. Using Docker (Optional)</span>
+        </h3>
+        <div class="code-block">
+          <code>docker-compose up -d</code>
+        </div>
+      </div>
+
+      <aside class="anth-admonition" style="margin-top: var(--space-6);">
+        <h5>
+          <span data-lang="zh">前提条件</span>
+          <span data-lang="en">Prerequisites</span>
+        </h5>
+        <p>
+          <span data-lang="zh">确保已安装 Python 3.10+、Node.js 18+ 和你选择的模型运行时（Ollama / LM Studio / llama.cpp）。</span>
+          <span data-lang="en">Ensure Python 3.10+, Node.js 18+, and your preferred model runtime (Ollama / LM Studio / llama.cpp) are installed.</span>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Comparison Section -->
+  <section class="anth-section" id="comparison">
+    <div class="anth-container--wide">
+      <h2 style="text-align: center;">
+        <span data-lang="zh">功能对比</span>
+        <span data-lang="en">Feature Comparison</span>
+      </h2>
+
+      <table class="comparison-table" style="margin-top: var(--space-6);">
+        <thead>
+          <tr>
+            <th>
+              <span data-lang="zh">功能</span>
+              <span data-lang="en">Feature</span>
+            </th>
+            <th>Helix</th>
+            <th>Open WebUI</th>
+            <th>Lobe Chat</th>
+            <th>SillyTavern</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span data-lang="zh">多运行时支持</span>
+              <span data-lang="en">Multi-Runtime</span>
+            </td>
+            <td><span class="check-icon">✓</span> Ollama/LM Studio/llama.cpp</td>
+            <td><span class="check-icon">✓</span> Ollama + OpenAI</td>
+            <td><span class="check-icon">✓</span> Ollama + OpenAI</td>
+            <td><span class="partial-icon">○</span> API only</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">群聊模式</span>
+              <span data-lang="en">Group Chat</span>
+            </td>
+            <td><span class="check-icon">✓</span> 5 种模式</td>
+            <td><span class="partial-icon">○</span> Limited</td>
+            <td><span class="partial-icon">○</span> In progress</td>
+            <td><span class="check-icon">✓</span> Extensions</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">深度监控</span>
+              <span data-lang="en">Deep Monitoring</span>
+            </td>
+            <td><span class="check-icon">✓</span> 全方位</td>
+            <td><span class="partial-icon">○</span> Basic</td>
+            <td><span class="partial-icon">○</span> Basic</td>
+            <td><span class="partial-icon">○</span> Limited</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">参数调优</span>
+              <span data-lang="en">Parameter Tuning</span>
+            </td>
+            <td><span class="check-icon">✓</span> 三级配置</td>
+            <td><span class="check-icon">✓</span> Yes</td>
+            <td><span class="check-icon">✓</span> Yes</td>
+            <td><span class="check-icon">✓</span> Yes</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">插件系统</span>
+              <span data-lang="en">Plugin System</span>
+            </td>
+            <td><span class="check-icon">✓</span> Event-driven</td>
+            <td><span class="partial-icon">○</span> Extensions</td>
+            <td><span class="check-icon">✓</span> Plugins</td>
+            <td><span class="check-icon">✓</span> Rich ecosystem</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">跨平台部署</span>
+              <span data-lang="en">Cross-Platform</span>
+            </td>
+            <td><span class="check-icon">✓</span> 本地/LAN/远程</td>
+            <td><span class="check-icon">✓</span> Local</td>
+            <td><span class="check-icon">✓</span> Cloud</td>
+            <td><span class="check-icon">✓</span> Local</td>
+          </tr>
+          <tr>
+            <td>
+              <span data-lang="zh">开源协议</span>
+              <span data-lang="en">License</span>
+            </td>
+            <td>Apache 2.0</td>
+            <td>MIT</td>
+            <td>MIT</td>
+            <td>MIT</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- License & Contributing -->
+  <section class="anth-section anth-section--subtle">
+    <div class="anth-container--narrow" style="text-align: center;">
+      <h2>
+        <span data-lang="zh">开源贡献</span>
+        <span data-lang="en">Open Source Contribution</span>
+      </h2>
+      <p class="anth-body" style="max-width: 600px; margin: var(--space-5) auto; color: var(--anth-text-secondary);">
+        <span data-lang="zh">
+          Helix 采用 Apache 2.0 开源协议，欢迎提交 Issue 和 Pull Request！你的每一份贡献都将推动项目发展。
+        </span>
+        <span data-lang="en">
+          Helix is Apache 2.0 licensed. Contributions, Issues, and Pull Requests are welcome! Every contribution helps make this project better.
+        </span>
+      </p>
+      <p style="margin-top: var(--space-5);">
+        <a class="anth-button" href="https://github.com/TbusOS/Helix/issues" target="_blank">
+          <span data-lang="zh">提交 Issue</span>
+          <span data-lang="en">Submit Issue</span>
+        </a>
+        <a class="anth-button anth-button--ghost" href="https://github.com/TbusOS/Helix/pulls" target="_blank" style="margin-left: var(--space-4);">
+          <span data-lang="zh">提交 PR</span>
+          <span data-lang="en">Submit PR</span>
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="anth-footer">
+    <div class="anth-footer-grid">
+      <div class="anth-footer-group">
+        <h5>Helix</h5>
+        <a href="#features" data-lang="zh">功能</a>
+        <a href="#features" data-lang="en">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#getting-started" data-lang="zh">快速开始</a>
+        <a href="#getting-started" data-lang="en">Quick Start</a>
+      </div>
+      <div class="anth-footer-group">
+        <h5>Documentation</h5>
+        <a href="./docs/specs/2026-04-28-helix-design.md">Technical Spec</a>
+        <a href="./docs/guides/getting-started.md">Getting Started</a>
+        <a href="./docs/guides/deployment.md">Deployment</a>
+        <a href="./docs/api/openapi.yaml">API Docs</a>
+      </div>
+      <div class="anth-footer-group">
+        <h5>Community</h5>
+        <a href="https://github.com/TbusOS/Helix">GitHub</a>
+        <a href="https://github.com/TbusOS/Helix/discussions">Discussions</a>
+        <a href="https://github.com/TbusOS/Helix/issues">Issues</a>
+      </div>
+      <div class="anth-footer-group">
+        <h5>Resources</h5>
+        <a href="https://ollama.ai">Ollama</a>
+        <a href="https://lmstudio.ai">LM Studio</a>
+        <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>
+      </div>
+    </div>
+    <div class="anth-footer-legal">
+      <p>© 2026 Helix Project. Apache License 2.0.</p>
+      <div class="anth-social">
+        <a href="https://github.com/TbusOS/Helix" aria-label="GitHub">GitHub</a>
+        <a href="#" aria-label="Twitter">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- design-review:self-diff v1 -->
+  <!--
+  Design decisions:
+  1. Used bilingual approach (zh/en) with CSS toggle for language switching - allows single HTML to serve both markets
+  2. Hero SVG illustration depicts helix spiral concept with model nodes - visually communicates multi-model collaboration
+  3. Architecture diagram uses color-coded modules matching brand colors (orange=Ollama, blue=Chat, green=Monitor)
+  4. Comparison table uses check/partial icons for quick visual scanning
+  5. Stats row uses large stat numbers for immediate impact
+
+  Known trade-offs:
+  - Bilingual approach doubles content length but avoids separate localized pages
+  - SVG diagrams are complex but provide better visual fidelity than CSS shapes
+  -->
+</body>
+</html>
