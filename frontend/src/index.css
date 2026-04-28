@@ -1,0 +1,324 @@
+/* Helix - Anthropic Design Override Styles */
+/* These extend the base anthropic.css with Helix-specific components */
+
+/* ========== Model Status Indicators ========== */
+.helix-model-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.helix-model-status--loaded {
+  background: rgba(120, 140, 93, 0.15);
+  color: var(--anth-green);
+}
+
+.helix-model-status--loading {
+  background: rgba(217, 119, 87, 0.15);
+  color: var(--anth-orange);
+}
+
+.helix-model-status--unloaded {
+  background: var(--anth-bg-subtle);
+  color: var(--anth-text-secondary);
+}
+
+/* ========== Chat Bubbles ========== */
+.helix-chat-message {
+  display: flex;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.helix-chat-message--user {
+  flex-direction: row-reverse;
+}
+
+.helix-chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.helix-chat-avatar--user {
+  background: var(--anth-orange);
+  color: white;
+}
+
+.helix-chat-avatar--model {
+  background: var(--anth-blue);
+  color: white;
+}
+
+.helix-chat-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.helix-chat-bubble--user {
+  background: var(--anth-orange);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.helix-chat-bubble--model {
+  background: var(--anth-bg-subtle);
+  color: var(--anth-text);
+  border-bottom-left-radius: 4px;
+}
+
+/* ========== Parameter Sliders ========== */
+.helix-param-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.helix-param-slider__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.helix-param-slider__name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--anth-text);
+}
+
+.helix-param-slider__value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--anth-text-secondary);
+}
+
+.helix-param-slider input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--anth-light-gray);
+  appearance: none;
+  cursor: pointer;
+}
+
+.helix-param-slider input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--anth-orange);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== Metrics Cards ========== */
+.helix-metrics-card {
+  background: var(--anth-bg);
+  border: 1px solid var(--anth-light-gray);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.helix-metrics-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.helix-metrics-card__title {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--anth-text-secondary);
+}
+
+.helix-metrics-card__value {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--anth-text);
+  line-height: 1;
+}
+
+.helix-metrics-card__unit {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--anth-text-secondary);
+  margin-left: 4px;
+}
+
+.helix-metrics-card__delta {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.helix-metrics-card__delta--positive {
+  color: var(--anth-green);
+}
+
+.helix-metrics-card__delta--negative {
+  color: var(--anth-danger);
+}
+
+/* ========== Model Cards ========== */
+.helix-model-card {
+  background: var(--anth-bg);
+  border: 1px solid var(--anth-light-gray);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  transition: box-shadow var(--duration-sm) var(--ease-anth);
+}
+
+.helix-model-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.helix-model-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.helix-model-card__name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--anth-text);
+  margin: 0;
+}
+
+.helix-model-card__runtime {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--anth-text-secondary);
+  margin-top: 4px;
+}
+
+.helix-model-card__meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--anth-light-gray);
+}
+
+.helix-model-card__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.helix-model-card__meta-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--anth-text-secondary);
+}
+
+.helix-model-card__meta-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--anth-text);
+}
+
+/* ========== Chat Modes ========== */
+.helix-chat-mode {
+  display: flex;
+  gap: 8px;
+  padding: var(--space-3);
+  background: var(--anth-bg-subtle);
+  border-radius: var(--radius-md);
+}
+
+.helix-chat-mode__btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--anth-text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-sm) var(--ease-anth);
+}
+
+.helix-chat-mode__btn:hover {
+  background: var(--anth-bg);
+  color: var(--anth-text);
+}
+
+.helix-chat-mode__btn--active {
+  background: var(--anth-orange);
+  color: white;
+}
+
+/* ========== Streaming Indicator ========== */
+.helix-streaming-dots {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.helix-streaming-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--anth-orange);
+  animation: helix-pulse 1.4s ease-in-out infinite;
+}
+
+.helix-streaming-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.helix-streaming-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes helix-pulse {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .helix-chat-bubble {
+    max-width: 85%;
+  }
+
+  .helix-model-card__meta {
+    grid-template-columns: 1fr;
+  }
+}
